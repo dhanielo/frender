@@ -13,7 +13,18 @@ DESTDIR = ../bin
 
 SOURCES += main.cpp \
     webpage.cpp \
-    custompage.cpp
+    filesystem.cpp \
+    system.cpp \
+    encoding.cpp \
+    terminal.cpp \
+    env.cpp \
+    callback.cpp
 
 HEADERS += \
-    webpage.h
+    webpage.h \
+    system.h \
+    filesystem.h \
+    encoding.h \
+    terminal.h \
+    env.h \
+    callback.h
