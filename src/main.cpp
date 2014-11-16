@@ -1,18 +1,23 @@
 #include <QApplication>
-#include <QWebPage>
 #include <QUrl>
-#include <webpage.h>
 
-class WebPage;
+#include <webpage.h>
+#include <frender.h>
 
 int main(int argc, char *argv[])
 {
+
     QApplication app(argc, argv);
 
-    //Thumbnailer* thumb = new Thumbnailer(QUrl("file:///home/daniel/index.html"));
+    QString path = "/home/daniel/teste.pdf";
+    QString google = "http://www.google.com.br";
 
-    WebPage* page = new WebPage(QUrl("file:///home/daniel/index.html"));
-    page->render(QString('/home/daniel/teste.pdf'), QVariantMap());
+    Frender* engine = new Frender();
+    QString contents = engine->getWebContents(QUrl("http://headdev.com.br/index.php"));
+
+    WebPage* page = new WebPage();
+    page->setContent(contents);
+    page->render(path, QVariantMap());
 
     return app.exec();
 }

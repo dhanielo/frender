@@ -177,9 +177,8 @@ bool WebPage::render(const QString &fileName, const QVariantMap &option)
 
     QString outFileName = fileName;
     QString tempFileName = "";
-
     QString format = "";
-    int quality = -1; // QImage#save default
+    int quality = -1; // QImage#sae default
 
     if( fileName == STDOUT_FILENAME || fileName == STDERR_FILENAME ){
         if( !QFile::exists(fileName) ){

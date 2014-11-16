@@ -11,15 +11,12 @@
 class WebPage : public QObject, public QWebFrame::PrintCallback
 {
     Q_OBJECT
-   /* Q_PROPERTY(QString title READ title)
+    Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QString frameTitle READ frameTitle)
     Q_PROPERTY(QString content READ content WRITE setContent)
-    Q_PROPERTY(QString offlineStoragePath READ offlineStoragePath)
-    Q_PROPERTY(int offlineStorageQuota READ offlineStorageQuota)
     Q_PROPERTY(QVariantMap viewportSize READ viewportSize WRITE setViewportSize)
     Q_PROPERTY(QVariantMap paperSize READ paperSize WRITE setPaperSize)
     Q_PROPERTY(QVariantMap clipRect READ clipRect WRITE setClipRect)
-    Q_PROPERTY(QString windowName READ windowName)*/
 
 public:
     WebPage(const QUrl &baseUrl = QUrl());
@@ -45,6 +42,8 @@ public:
     void setPaperSize(const QVariantMap &size);
     QVariantMap paperSize() const;
 
+    bool render(const QString &fileName, const QVariantMap &map = QVariantMap());
+
     QString footer(int page, int numPages);
     qreal footerHeight() const;
     QString header(int page, int numPages);
@@ -57,7 +56,6 @@ signals:
      void closing(QObject *page);
 
 public slots:
-     bool render(const QString &fileName, const QVariantMap &map = QVariantMap());
     void release();
     void close();
 
