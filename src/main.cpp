@@ -3,21 +3,36 @@
 
 #include <webpage.h>
 #include <frender.h>
+#include <iostream>
+#include <string>
+
+using namespace std;
 
 int main(int argc, char *argv[])
 {
 
-    QApplication app(argc, argv);
+    if (argc >= 2) {
 
-    QString path = "/home/daniel/teste.pdf";
-    QString google = "http://www.google.com.br";
+        QString out_path = argv[1];
+        QString url = argv[2];
 
-    Frender* engine = new Frender();
-    QString contents = engine->getWebContents(QUrl("http://headdev.com.br/index.php"));
+        QApplication app(argc, argv);
 
-    WebPage* page = new WebPage();
-    page->setContent(contents);
-    page->render(path, QVariantMap());
+        Frender* engine = new Frender();
+        QString contents = engine->getWebContents(QUrl(url));
 
-    return app.exec();
+        WebPage* page = new WebPage();
+        page->setContent(contents);
+        page->render(out_path, QVariantMap());
+
+        return app.exec();
+
+    } else {
+
+        printf("Usage: frender source destination\n");
+        printf("Sources: http, file, img\n");
+        printf("Destinations: .pdf, .png\n");
+
+        exit;
+    }
 }

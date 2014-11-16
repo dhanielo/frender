@@ -31,6 +31,8 @@
 #include <QStringList>
 #include <curl/curl.h>
 
+#define QTCURL_DEBUG true
+
 CURLcode curlGlobalInit() {
     return curl_global_init(CURL_GLOBAL_ALL);
 }
