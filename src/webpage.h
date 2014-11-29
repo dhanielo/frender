@@ -33,6 +33,9 @@ public:
     QString title() const;
     QString frameTitle() const;
 
+    void setOutputPath(const QString &path);
+    QString getOutputPath() const;
+
     void setViewportSize(const QVariantMap &size);
     QVariantMap viewportSize() const;
 
@@ -72,6 +75,7 @@ private:
     QWebFrame *m_currentFrame;
     QPoint m_scrollPosition;
     QRect m_clipRect;
+    QString output_path;
     QVariantMap m_paperSize; // For PDF output via render()
 };
 

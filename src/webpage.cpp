@@ -51,6 +51,11 @@ WebPage::WebPage(const QUrl &baseUrl)
     m_customWebPage->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
     m_customWebPage->settings()->setLocalStoragePath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
 
+    m_customWebPage->settings()->setAttribute(QWebSettings::JavascriptEnabled, false);
+    m_customWebPage->settings()->setAttribute(QWebSettings::PluginsEnabled, false);
+    m_customWebPage->settings()->setAttribute(QWebSettings::AutoLoadImages, true);
+    m_customWebPage->settings()->setAttribute(QWebSettings::JavascriptCanOpenWindows, false);
+
     m_customWebPage->setViewportSize(QSize(400, 300));
 }
 
@@ -149,6 +154,16 @@ QVariantMap WebPage::clipRect() const
     result["top"] = m_clipRect.top();
     result["left"] = m_clipRect.left();
     return result;
+}
+
+void WebPage::setOutputPath(const QString &path)
+{
+    output_path = path;
+}
+
+QString WebPage::getOutputPath() const
+{
+    return output_path;
 }
 
 void WebPage::setPaperSize(const QVariantMap &size)

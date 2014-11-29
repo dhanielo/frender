@@ -1,16 +1,24 @@
 #include "frender.h"
 
+#include <QApplication>
+#include <QStringList>
 #include <QUrl>
 #include <QString>
-#include <QtCUrl.h>
 #include <QDebug>
+#include <webpage.h>
 
 #include <iostream>
 
 #define BLANK_HTML  "<html><head></head><body></body></html>"
 
+static Frender *frenderInstance  = NULL;
+
 Frender::Frender()
 {
+    page = new WebPage();
+    ended = false;
+
+    connect(this, SIGNAL(finished()), this, SLOT(close()));
 }
 
 Frender::~Frender()
@@ -18,26 +26,53 @@ Frender::~Frender()
     emit closing(this);
 }
 
-QString Frender::getWebContents(const QUrl &url)
+Frender *Frender::instance()
 {
-    QtCUrl cUrl;
-    cUrl.setTextCodec("utf-8");
-    QtCUrl::Options opt;
-    opt[CURLOPT_URL] = url;
-    opt[CURLOPT_FOLLOWLOCATION] = true;
-    opt[CURLOPT_FAILONERROR] = true;
-    QStringList headers;
-    headers
-        << "Accept  text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
-        << "Accept-Encoding gzip,deflate,sdch"
-        << "Accept-Language pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4,it;q=0.2,gl;q=0.2,und;q=0.2,fr;q=0.2"
-        << "User-Agent  Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36";
-    opt[CURLOPT_HTTPHEADER] = headers;
-    QString result = cUrl.exec(opt);
-
-    if (!cUrl.lastError().isOk()) {
-        qDebug() << QString("Error: %1\nBuffer: %2").arg(cUrl.lastError().text()).arg(cUrl.errorBuffer());
+    if (NULL == frenderInstance) {
+        frenderInstance = new Frender();
     }
 
-    return result;
+    return frenderInstance;
+}
+
+bool Frender::execute()
+{
+    if (ended)
+        return false;
+
+    QStringList args = QApplication::arguments();
+
+    if (args.length() >= 2) {
+
+        QString out_path = args[1];
+        QString arg = args[2];
+        QUrl url = arg;
+        this->convert(url, out_path);
+    } else {
+        printf("Usage: frender source destination\n");
+        printf("Sources: http, file, img\n");
+        printf("Destinations: .pdf, .png\n");
+        ended = true;
+    }
+
+    return !ended;
+}
+
+void Frender::convert(const QUrl &url, const QString &out_path)
+{
+    page->setOutputPath(out_path);
+    connect(page->mainFrame(),SIGNAL(loadFinished(bool)), this, SLOT(processPage()));
+    page->mainFrame()->load(url);
+}
+
+
+void Frender::processPage()
+{
+   page->render(page->getOutputPath(), QVariantMap());
+   emit finished();
+}
+
+void Frender::close()
+{
+    QApplication::instance()->exit();
 }

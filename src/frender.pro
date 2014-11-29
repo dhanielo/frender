@@ -19,8 +19,7 @@ SOURCES += main.cpp \
     terminal.cpp \
     env.cpp \
     callback.cpp \
-    frender.cpp \
-    QtCUrl.cpp
+    frender.cpp
 
 HEADERS += \
     webpage.h \
@@ -30,7 +29,4 @@ HEADERS += \
     terminal.h \
     env.h \
     callback.h \
-    frender.h \
-    QtCUrl.h
-
-LIBS += -lcurl
+    frender.h
