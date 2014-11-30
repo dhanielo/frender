@@ -69,6 +69,11 @@ QWebFrame *WebPage::mainFrame()
     return m_mainFrame;
 }
 
+QWebPage *WebPage::webPage()
+{
+    return m_customWebPage;
+}
+
 QString WebPage::content() const
 {
     return m_mainFrame->toHtml();

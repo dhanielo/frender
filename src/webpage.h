@@ -23,6 +23,7 @@ public:
     virtual ~WebPage();
 
     QWebFrame *mainFrame();
+    QWebPage *webPage();
 
     QString content() const;
     QString frameContent() const;
